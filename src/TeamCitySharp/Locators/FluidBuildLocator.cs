@@ -127,6 +127,12 @@ namespace TeamCitySharp.Locators
             private set;
         }
 
+        public int? LookupLimit
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Fluid Methods
@@ -250,6 +256,13 @@ namespace TeamCitySharp.Locators
         {
             var clone = (FluidBuildLocator)this.MemberwiseClone();
             clone.Branch = branch;
+            return clone;
+        }
+
+        public FluidBuildLocator WithLookupLimit(int limit)
+        {
+            var clone = (FluidBuildLocator)this.MemberwiseClone();
+            clone.LookupLimit = limit;
             return clone;
         }
 
@@ -383,6 +396,11 @@ namespace TeamCitySharp.Locators
             if (Branch != null)
             {
                 dimensions.Add("branch:(" + Branch.ToString() + ")");
+            }
+
+            if (LookupLimit.HasValue)
+            {
+                dimensions.Add("lookupLimit:" + LookupLimit.Value);
             }
 
             return string.Join(",", dimensions.ToArray());
