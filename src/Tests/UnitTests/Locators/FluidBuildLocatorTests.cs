@@ -175,6 +175,12 @@ namespace TeamCitySharp.UnitTests
                 Assert.AreEqual("id:9999,branch:(default:any)", locator.ToString());
             }
 
+            [Test]
+            public void ReturnsWithLookupLimit()
+            {
+                var locator = new FluidBuildLocator().WithLookupLimit(10000);
+                Assert.AreEqual("lookupLimit:10000", locator.ToString());
+            }
         }
 
     }
