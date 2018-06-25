@@ -60,7 +60,7 @@
     <Compile Include="Locators\BuildLocatorTests.cs" />
     <Compile Include="Locators\BuildTypeLocatorTests.cs" />
     <Compile Include="Locators\FluidBranchLocatorTests.cs" />
-    <Compile Include="Locators\FluidPaginationLocatorTests.cs" />
+    <Compile Include="Locators\FluidVcsRootLocatorTests.cs" />
     <Compile Include="Locators\FluidBuildLocatorTests.cs" />
     <Compile Include="Locators\FluidBuildTypeLocatorTests.cs" />
     <Compile Include="Locators\FluidProjectLocatorTests.cs" />

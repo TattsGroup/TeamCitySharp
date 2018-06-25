@@ -8,7 +8,7 @@ using TeamCitySharp.Locators;
 namespace TeamCitySharp.UnitTests
 {
 
-    public class FluidPaginationLocatorTests
+    public class FluidVcsRootLocatorTests
     {
 
         [TestFixture]
@@ -18,28 +18,28 @@ namespace TeamCitySharp.UnitTests
             [Test]
             public void ReturnsWhenEmpty()
             {
-                var locator = new FluidPaginationLocator();
+                var locator = new FluidVcsRootLocator();
                 Assert.AreEqual(string.Empty, locator.ToString());
             }
 
             [Test]
             public void ReturnsWithCount()
             {
-                var locator = new FluidPaginationLocator().WithCount(9999);
+                var locator = new FluidVcsRootLocator().WithCount(9999);
                 Assert.AreEqual("count:9999", locator.ToString());
             }
 
             [Test]
             public void ReturnsWithStart()
             {
-                var locator = new FluidPaginationLocator().WithStart(9999);
+                var locator = new FluidVcsRootLocator().WithStart(9999);
                 Assert.AreEqual("start:9999", locator.ToString());
             }
 
             [Test]
             public void ReturnsWithLookupLimit()
             {
-                var locator = new FluidPaginationLocator().WithLookupLimit(10000);
+                var locator = new FluidVcsRootLocator().WithLookupLimit(10000);
                 Assert.AreEqual("lookupLimit:10000", locator.ToString());
             }
         }

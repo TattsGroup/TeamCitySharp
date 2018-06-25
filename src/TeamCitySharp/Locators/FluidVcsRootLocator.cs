@@ -5,12 +5,12 @@ using TeamCitySharp.Locators;
 namespace TeamCitySharp.Locators
 {
 
-    public class FluidPaginationLocator : ILocator
+    public class FluidVcsRootLocator : IVcsRootLocator
     {
 
         #region Constructors
 
-        public FluidPaginationLocator()
+        public FluidVcsRootLocator()
             : base()
         {
         }
@@ -41,23 +41,23 @@ namespace TeamCitySharp.Locators
 
         #region Fluid Methods
 
-        public FluidPaginationLocator WithStart(int? start)
+        public FluidVcsRootLocator WithStart(int? start)
         {
-            var clone = (FluidPaginationLocator)this.MemberwiseClone();
+            var clone = (FluidVcsRootLocator)this.MemberwiseClone();
             clone.Start = start;
             return clone;
         }
 
-        public FluidPaginationLocator WithCount(int? count)
+        public FluidVcsRootLocator WithCount(int? count)
         {
-            var clone = (FluidPaginationLocator)this.MemberwiseClone();
+            var clone = (FluidVcsRootLocator)this.MemberwiseClone();
             clone.Count = count;
             return clone;
         }
 
-        public FluidPaginationLocator WithLookupLimit(int limit)
+        public FluidVcsRootLocator WithLookupLimit(int limit)
         {
-            var clone = (FluidPaginationLocator)this.MemberwiseClone();
+            var clone = (FluidVcsRootLocator)this.MemberwiseClone();
             clone.LookupLimit = limit;
             return clone;
         }
