@@ -126,6 +126,9 @@
     <Compile Include="Fields\VcsRootEntriesField.cs" />
     <Compile Include="Fields\VcsRootEntryField.cs" />
     <Compile Include="Fields\VcsRootField.cs" />
+    <Compile Include="Locators\FluidVcsRootLocator.cs" />
+    <Compile Include="Locators\IBuildLocator.cs" />
+    <Compile Include="Locators\IVcsRootLocator.cs" />
     <Compile Include="Locators\RunningLocatorFlag.cs" />
     <Compile Include="Locators\BranchLocatorFlag.cs" />
     <Compile Include="Locators\BuildStatus.cs" />
@@ -135,7 +138,6 @@
     <Compile Include="Locators\FluidProjectLocator.cs" />
     <Compile Include="Locators\FluidUserLocator.cs" />
     <Compile Include="Locators\IBranchLocator.cs" />
-    <Compile Include="Locators\IBuildLocator.cs" />
     <Compile Include="Locators\IProjectLocator.cs" />
     <Compile Include="Locators\IBuildTypeLocator.cs" />
     <Compile Include="Locators\IUserLocator.cs" />
