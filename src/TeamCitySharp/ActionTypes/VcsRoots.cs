@@ -33,7 +33,7 @@ namespace TeamCitySharp.ActionTypes
 
         public List<VcsRoot> All(IVcsRootLocator locator)
         {
-            var vcsRootWrapper = _caller.GetFormat<VcsRootWrapper>(ActionHelper.CreateFieldUrl("/app/rest/vcs-roots/locator={0}", _fields), locator);
+            var vcsRootWrapper = _caller.GetFormat<VcsRootWrapper>(ActionHelper.CreateFieldUrl("/app/rest/vcs-roots?locator={0}", _fields), locator);
 
             return vcsRootWrapper.VcsRoot;
         }
