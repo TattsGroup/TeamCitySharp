@@ -8,6 +8,7 @@ namespace TeamCitySharp.ActionTypes
   {
     IVcsRoots GetFields(string fields);
     List<VcsRoot> All();
+    List<VcsRoot> All(IVcsRootLocator locator);
     VcsRoot ById(string vcsRootId);
     VcsRoot AttachVcsRoot(BuildTypeLocator locator, VcsRoot vcsRoot);
     void DetachVcsRoot(BuildTypeLocator locator, string vcsRootId);
