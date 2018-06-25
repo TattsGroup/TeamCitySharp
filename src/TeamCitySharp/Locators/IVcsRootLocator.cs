@@ -5,9 +5,7 @@ using System.Text;
 
 namespace TeamCitySharp.Locators
 {
-
     public interface IVcsRootLocator
     {
     }
-
 }
