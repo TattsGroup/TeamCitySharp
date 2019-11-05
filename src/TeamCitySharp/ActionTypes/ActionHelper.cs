@@ -20,5 +20,13 @@
       }
       return url;
     }
+
+    public static string CleanUrl(string url)
+    {
+      return url
+        .Replace("/httpAuth", "")
+        .Replace("/guestAuth", "")
+        .Replace("/app/rest", "");
+    }
   }
 }

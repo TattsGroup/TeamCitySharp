@@ -9,8 +9,8 @@ namespace TeamCitySharp.ActionTypes
     List<Build> All();
 
     BuildQueue GetFields(string fields);
-    List<Build> ByBuildTypeLocator(BuildTypeLocator locator);
+    List<Build> ByBuildTypeLocator(IBuildTypeLocator locator);
 
-    List<Build> ByProjectLocater(ProjectLocator projectLocator);
+    List<Build> ByProjectLocater(IProjectLocator projectLocator);
   }
 }

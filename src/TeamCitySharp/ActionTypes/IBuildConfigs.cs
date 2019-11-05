@@ -27,22 +27,22 @@ namespace TeamCitySharp.ActionTypes
                      string newBuildTypeId = "");
 
 
-    void SetConfigurationSetting(BuildTypeLocator locator, string settingName, string settingValue);
-    bool GetConfigurationPauseStatus(BuildTypeLocator locator);
-    void SetConfigurationPauseStatus(BuildTypeLocator locator, bool isPaused);
+    void SetConfigurationSetting(IBuildTypeLocator locator, string settingName, string settingValue);
+    bool GetConfigurationPauseStatus(IBuildTypeLocator locator);
+    void SetConfigurationPauseStatus(IBuildTypeLocator locator, bool isPaused);
 
 
-    void PostRawBuildStep(BuildTypeLocator locator, string rawXml);
-    void PostRawBuildTrigger(BuildTypeLocator locator, string rawXml);
-    void SetTrigger(BuildTypeLocator locator, BuildTrigger trigger);
+    void PostRawBuildStep(IBuildTypeLocator locator, string rawXml);
+    void PostRawBuildTrigger(IBuildTypeLocator locator, string rawXml);
+    void SetTrigger(IBuildTypeLocator locator, BuildTrigger trigger);
 
-    void SetConfigurationParameter(BuildTypeLocator locator, string key, string value);
-    void PostRawAgentRequirement(BuildTypeLocator locator, string rawXml);
-    void DeleteBuildStep(BuildTypeLocator locator, string buildStepId);
+    void SetConfigurationParameter(IBuildTypeLocator locator, string key, string value);
+    void PostRawAgentRequirement(IBuildTypeLocator locator, string rawXml);
+    void DeleteBuildStep(IBuildTypeLocator locator, string buildStepId);
 
-    void DeleteAgentRequirement(BuildTypeLocator locator, string agentRequirementId);
-    void DeleteParameter(BuildTypeLocator locator, string parameterName);
-    void DeleteBuildTrigger(BuildTypeLocator locator, string buildTriggerId);
+    void DeleteAgentRequirement(IBuildTypeLocator locator, string agentRequirementId);
+    void DeleteParameter(IBuildTypeLocator locator, string parameterName);
+    void DeleteBuildTrigger(IBuildTypeLocator locator, string buildTriggerId);
 
     /// <summary>
     /// DEPRECATED: After 2017.2 Please use AttachTemplates
@@ -50,7 +50,7 @@ namespace TeamCitySharp.ActionTypes
     /// </summary>
     /// <param name="locatorBuildType">Locator for the build type which is to be associated with a template.</param>
     /// <param name="locatorTemplate">Locator for the template.</param>
-    void SetBuildTypeTemplate(BuildTypeLocator locatorBuildType, BuildTypeLocator locatorTemplate);
+    void SetBuildTypeTemplate(IBuildTypeLocator locatorBuildType, IBuildTypeLocator locatorTemplate);
 
     /// <summary>
     /// <para>Locates a build type by its locator.</para>
@@ -58,50 +58,50 @@ namespace TeamCitySharp.ActionTypes
     /// </summary>
     /// <param name="locator">Locator for the build type.</param>
     /// <returns>The build type with all its properties.</returns>
-    BuildConfig BuildType(BuildTypeLocator locator);
+    BuildConfig BuildType(IBuildTypeLocator locator);
 
-    void SetBuildTypeVariable(BuildTypeLocator locatorBuildType, string nameVariable, string value);
+    void SetBuildTypeVariable(IBuildTypeLocator locatorBuildType, string nameVariable, string value);
 
-    void DeleteConfiguration(BuildTypeLocator locator);
+    void DeleteConfiguration(IBuildTypeLocator locator);
 
     /// <summary>
     /// Deletes all of the parameters defined locally on this build type.
     /// This spares those parameters inherited from the template, you will still get them when listing all parameters.
     /// </summary>
     /// <since>8.0</since>
-    void DeleteAllBuildTypeParameters(BuildTypeLocator locator);
+    void DeleteAllBuildTypeParameters(IBuildTypeLocator locator);
 
     /// <summary>
     /// Replaces all of the parameters defined locally on this build type with the new set supplied.
     /// Same as calling <see cref="DeleteAllBuildTypeParameters"/> and then <see cref="SetConfigurationParameter"/> for each entry.
     /// </summary>
     /// <since>8.0</since>
-    void PutAllBuildTypeParameters(BuildTypeLocator locator, IDictionary<string, string> parameters);
+    void PutAllBuildTypeParameters(IBuildTypeLocator locator, IDictionary<string, string> parameters);
 
-    void DownloadConfiguration(BuildTypeLocator locator, Action<string> downloadHandler);
+    void DownloadConfiguration(IBuildTypeLocator locator, Action<string> downloadHandler);
 
     //Template
     Template CopyTemplate(string templateId, string templateName, string destinationProjectId, string newTemplateId = "");
-    Template GetTemplate(BuildTypeLocator locator);
+    Template GetTemplate(IBuildTypeLocator locator);
     /// <summary>
     /// Supports version 2017.2 and higher
     /// </summary>
     /// <param name="locator"></param>
     /// <returns></returns>
-    Templates GetTemplates(BuildTypeLocator locator);
-    void AttachTemplate(BuildTypeLocator locator, string templateId);
+    Templates GetTemplates(IBuildTypeLocator locator);
+    void AttachTemplate(IBuildTypeLocator locator, string templateId);
     /// <summary>
     /// Supports version 2017.2 and higher
     /// </summary>
     /// <param name="locator"></param>
     /// <param name="templateList"></param>
-    void AttachTemplates(BuildTypeLocator locator, Templates templateList);
-    void DetachTemplate(BuildTypeLocator locator);
+    void AttachTemplates(IBuildTypeLocator locator, Templates templateList);
+    void DetachTemplate(IBuildTypeLocator locator);
     /// <summary>
     /// Supports version 2017.2 and higher
     /// </summary>
     /// <param name="locator"></param>
-    void DetachTemplates(BuildTypeLocator locator);
+    void DetachTemplates(IBuildTypeLocator locator);
 
     // Dependencies
     ArtifactDependencies GetArtifactDependencies(string buildTypeId);
@@ -121,12 +121,12 @@ namespace TeamCitySharp.ActionTypes
     ///    </snapshot-dependency>
     /// ]]></code>
     /// </summary>
-    void PostRawSnapshotDependency(BuildTypeLocator locator, XmlElement rawXml);
-    void PostRawArtifactDependency(BuildTypeLocator locator, string rawXml);
-    void SetArtifactDependency(BuildTypeLocator locator, ArtifactDependency dependency);
-    void SetSnapshotDependency(BuildTypeLocator locator, SnapshotDependency dependency);
-    void DeleteArtifactDependency(BuildTypeLocator locator, string artifactDependencyId);
-    void DeleteSnapshotDependency(BuildTypeLocator locator, string snapshotDependencyId);
+    void PostRawSnapshotDependency(IBuildTypeLocator locator, XmlElement rawXml);
+    void PostRawArtifactDependency(IBuildTypeLocator locator, string rawXml);
+    void SetArtifactDependency(IBuildTypeLocator locator, ArtifactDependency dependency);
+    void SetSnapshotDependency(IBuildTypeLocator locator, SnapshotDependency dependency);
+    void DeleteArtifactDependency(IBuildTypeLocator locator, string artifactDependencyId);
+    void DeleteSnapshotDependency(IBuildTypeLocator locator, string snapshotDependencyId);
     bool ModifArtifactDependencies(string format, string oldDendencyConfigurationId, string id);
     bool ModifSnapshotDependencies(string format, string oldDendencyConfigurationId, string id);
   }

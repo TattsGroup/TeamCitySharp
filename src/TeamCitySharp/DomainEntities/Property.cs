@@ -22,9 +22,14 @@ namespace TeamCitySharp.DomainEntities
 
     [JsonProperty("name")]
     public string Name { get; set; }
+
     [JsonProperty("value")]
     public string Value { get; set; }
+
     [JsonProperty("inherited")]
     public bool Inherited { get; set; }
+
+    [JsonProperty("type")]
+    public PropertyType Type { get; set; }
   }
 }

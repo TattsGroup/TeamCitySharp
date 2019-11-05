@@ -12,33 +12,101 @@ namespace TeamCitySharp.ActionTypes
 {
   internal class BuildArtifacts : IBuildArtifacts
   {
-    private readonly ITeamCityCaller m_caller;
+    private const string TeamCityRestBuildArtifactChildren = "/artifacts/children";
+    private const string TeamCityRestBuildArtifactMetadata = "/artifacts/metadata";
+    private const string TeamCityRestBuildFormat = "/app/rest/builds/id:{0}";
+
+    private readonly ITeamCityCaller mm_caller;
 
     public BuildArtifacts(ITeamCityCaller caller)
     {
-      m_caller = caller;
+      mm_caller = caller;
     }
 
     public void DownloadArtifactsByBuildId(string buildId, Action<string> downloadHandler)
     {
-      m_caller.GetDownloadFormat(downloadHandler, "/downloadArtifacts.html?buildId={0}", false, buildId);
+      mm_caller.GetDownloadFormat(downloadHandler, "/downloadArtifacts.html?buildId={0}", false, buildId);
     }
 
-    public ArtifactWrapper ByBuildConfigId(string buildConfigId, string param="")
+    public ArtifactWrapper ByBuildConfigId(string buildConfigId, string param = "")
     {
-      return new ArtifactWrapper(m_caller, buildConfigId, param);
+      return new ArtifactWrapper(mm_caller, buildConfigId, param);
+    }
+
+    /// <summary>
+    /// Retrieves the artifacts associated to the specified <see cref="Build"/>.
+    /// </summary>
+    /// <param name="build">
+    /// The TeamCity <see cref="Build"/> of the desired artifacts.
+    /// </param>
+    /// <param name="artifactRelativeName">
+    /// the relative path and filename of a specific artifact. Supports referencing files under archives using the  &quot;!&quot; delimiter after the archive name.
+    /// </param>
+    /// <remarks>
+    /// This method is only supported by TeamCity 8.x and higher.
+    /// </remarks>
+    public IArtifactWrapper2 ByBuild(DomainEntities.Build build, string artifactRelativeName = "")
+    {
+      if (build == null || string.IsNullOrEmpty(build.Id))
+      {
+        throw new ArgumentException("Invalid build specified. Please be sure to use the methods of the IBuilds interface to obtain it.");
+      }
+
+      var receivedBuildHref = string.Format(TeamCityRestBuildFormat, build.Id);
+      if (!build.Href.EndsWith(receivedBuildHref))
+      {
+        throw new ArgumentException("Invalid build specified. Please be sure to use the methods of the IBuilds interface to obtain it.");
+      }
+
+      DomainEntities.Artifacts artifacts = null;
+      try
+      {
+        artifacts = mm_caller.GetFormat<DomainEntities.Artifacts>("{0}{1}{2}",
+                                                     build.Href,
+                                                     TeamCityRestBuildArtifactChildren,
+                                                     string.IsNullOrEmpty(artifactRelativeName) ? string.Empty : string.Format("/{0}", artifactRelativeName));
+      }
+      catch
+      {
+
+      }
+
+      if (artifacts == null)
+      {
+        var artifact = mm_caller.GetFormat<DomainEntities.Artifact>("{0}{1}{2}",
+                                                     build.Href,
+                                                     TeamCityRestBuildArtifactMetadata,
+                                                     string.IsNullOrEmpty(artifactRelativeName) ? string.Empty : string.Format("/{0}", artifactRelativeName));
+
+        artifacts = new DomainEntities.Artifacts()
+        {
+          Files = new List<DomainEntities.Artifact> { artifact }
+        };
+      }
+
+      return new ArtifactWrapper2(mm_caller, artifacts, artifactRelativeName);
+    }
+
+    /// <summary>
+    /// Retrieves the content of a specified Artifact
+    /// </summary>
+    public string GetArtifactContent(string artifactUrl)
+    {
+      var artifact = mm_caller.GetFormat<DomainEntities.Artifact>(artifactUrl);
+      string raw = mm_caller.GetRaw(artifact.Content.Href);
+      return raw;
     }
   }
 
   public class ArtifactWrapper
   {
-    private readonly ITeamCityCaller m_caller;
+    private readonly ITeamCityCaller mm_caller;
     private readonly string m_buildConfigId;
     private readonly string m_param;
 
-    internal ArtifactWrapper(ITeamCityCaller caller, string buildConfigId,string param)
+    internal ArtifactWrapper(ITeamCityCaller caller, string buildConfigId, string param)
     {
-      m_caller = caller;
+      mm_caller = caller;
       m_buildConfigId = buildConfigId;
       m_param = param;
     }
@@ -66,8 +134,8 @@ namespace TeamCitySharp.ActionTypes
     public ArtifactCollection Specification(string buildSpecification)
     {
       var url = $"/repository/download/{m_buildConfigId}/{buildSpecification}/teamcity-ivy.xml";
-      var xml = m_caller.GetRaw(string.IsNullOrEmpty(m_param) ? url : $"{url}?{m_param}", false);
-      
+      var xml = mm_caller.GetRaw(string.IsNullOrEmpty(m_param) ? url : $"{url}?{m_param}", false);
+
       var document = new XmlDocument();
       document.LoadXml(xml);
       var artifactNodes = document.SelectNodes("//artifact");
@@ -85,19 +153,19 @@ namespace TeamCitySharp.ActionTypes
           artifact += "." + extensionNode.Value;
         list.Add($"/repository/download/{m_buildConfigId}/{buildSpecification}/{artifact}");
       }
-      return new ArtifactCollection(m_caller, list,m_param);
+      return new ArtifactCollection(mm_caller, list, m_param);
     }
   }
 
   public class ArtifactCollection
   {
-    private readonly ITeamCityCaller m_caller;
+    private readonly ITeamCityCaller mm_caller;
     private readonly List<string> m_urls;
     private readonly string m_param;
 
-    internal ArtifactCollection(ITeamCityCaller caller, List<string> urls, string param="")
+    internal ArtifactCollection(ITeamCityCaller caller, List<string> urls, string param = "")
     {
-      m_caller = caller;
+      mm_caller = caller;
       m_urls = urls;
       m_param = param;
     }
@@ -158,7 +226,7 @@ namespace TeamCitySharp.ActionTypes
         {
           currentUrl = $"{currentUrl}?{m_param}";
         }
-        m_caller.GetDownloadFormat(tempfile => File.Move(tempfile, destination), currentUrl, false);
+        mm_caller.GetDownloadFormat(tempfile => File.Move(tempfile, destination), currentUrl, false);
       }
       return downloaded;
     }
@@ -228,7 +296,7 @@ namespace TeamCitySharp.ActionTypes
                 currentUrl = $"{currentUrl}?{m_param}";
               }
 
-              m_caller.GetDownloadFormat(tempfile => File.Move(tempfile, destination), currentUrl, false);
+              mm_caller.GetDownloadFormat(tempfile => File.Move(tempfile, destination), currentUrl, false);
               break;
             }
           }

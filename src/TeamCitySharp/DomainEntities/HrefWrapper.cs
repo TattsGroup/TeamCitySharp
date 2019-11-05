@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TeamCitySharp.DomainEntities
 {
-  public class RelatedIssues
+  public class HrefWrapper
   {
     [JsonProperty("href")]
     public string Href { get; set; }
