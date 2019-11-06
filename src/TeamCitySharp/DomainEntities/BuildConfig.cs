@@ -77,7 +77,10 @@ namespace TeamCitySharp.DomainEntities
 
     [JsonProperty("agent-requirements")]
     public AgentRequirements AgentRequirements { get; set; }
-
+   
+    [JsonProperty("features")]
+    public BuildFeatures Features { get; set; }
+   
     [JsonProperty("triggers")]
     public BuildTriggers Triggers { get; set; }
 

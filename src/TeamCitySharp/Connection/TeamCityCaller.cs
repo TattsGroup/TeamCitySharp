@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
+using TeamCitySharp.ActionTypes;
 using TeamCitySharp.DomainEntities;
 using File = System.IO.File;
 
@@ -266,6 +267,12 @@ namespace TeamCitySharp.Connection
 
     private string CreateUrl(string urlPart, bool rest)
     {
+      if (rest)
+      {
+        // Clean the Url incase it has any existing rest/auth segments
+        urlPart = ActionHelper.CleanUrl(urlPart);
+      }
+
       var protocol = m_credentials.UseSSL ? "https://" : "http://";
       if(m_credentials.UseSSL) ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
       var authType = m_credentials.ActAsGuest ? "/guestAuth" : "/httpAuth";

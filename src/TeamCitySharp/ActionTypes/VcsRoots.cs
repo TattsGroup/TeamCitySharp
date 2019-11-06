@@ -35,6 +35,13 @@ namespace TeamCitySharp.ActionTypes
       return vcsRootWrapper.VcsRoot;
     }
 
+    public List<VcsRoot> All(IVcsRootLocator locator)
+    {
+        var vcsRootWrapper = m_caller.GetFormat<VcsRootWrapper>(ActionHelper.CreateFieldUrl("/vcs-roots?locator={0}", m_fields), locator);
+
+        return vcsRootWrapper.VcsRoot;
+    }
+
     public VcsRoot ById(string vcsRootId)
     {
       var vcsRoot = m_caller.GetFormat<VcsRoot>(ActionHelper.CreateFieldUrl("/vcs-roots/id:{0}", m_fields),
@@ -43,7 +50,7 @@ namespace TeamCitySharp.ActionTypes
       return vcsRoot;
     }
 
-    public VcsRoot AttachVcsRoot(BuildTypeLocator locator, VcsRoot vcsRoot)
+    public VcsRoot AttachVcsRoot(IBuildTypeLocator locator, VcsRoot vcsRoot)
     {
       var data = new VcsRootEntry{ VcsRoot = new VcsRoot { Id = vcsRoot.Id}};
 
@@ -51,7 +58,7 @@ namespace TeamCitySharp.ActionTypes
                                          "/buildTypes/{0}/vcs-root-entries", locator);
     }
 
-    public void DetachVcsRoot(BuildTypeLocator locator, string vcsRootId)
+    public void DetachVcsRoot(IBuildTypeLocator locator, string vcsRootId)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/vcs-root-entries/{1}", locator, vcsRootId);
     }
@@ -70,6 +77,11 @@ namespace TeamCitySharp.ActionTypes
     public void DeleteProperties(VcsRoot vcsRoot, string parameterName)
     {
       m_caller.DeleteFormat("/vcs-roots/id:{0}/properties/{1}", vcsRoot.Id, parameterName);
+    }
+
+    public VcsRoot CreateFromXml(string vcsRootXml)
+    {
+        return m_caller.Post<VcsRoot>(vcsRootXml, HttpContentTypes.ApplicationXml, "/vcs-roots", HttpContentTypes.ApplicationJson);
     }
 
     public VcsRoot CreateVcsRoot(VcsRoot vcsRoot, string projectId )

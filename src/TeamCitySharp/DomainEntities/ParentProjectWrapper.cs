@@ -8,9 +8,9 @@ namespace TeamCitySharp.DomainEntities
 {
   public class ParentProjectWrapper
   {
-    private readonly ProjectLocator _locator;
+    private readonly IProjectLocator _locator;
 
-    public ParentProjectWrapper(ProjectLocator locator)
+    public ParentProjectWrapper(IProjectLocator locator)
     {
       _locator = locator;
     }

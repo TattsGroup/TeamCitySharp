@@ -27,21 +27,21 @@ namespace TeamCitySharp.ActionTypes
 
     #region Public Methods
 
-    public Builds GetFields(string fields)
+    public IBuilds GetFields(string fields)
     {
       var newInstance = (Builds) MemberwiseClone();
       newInstance.m_fields = fields;
       return newInstance;
     }
 
-    public List<Build> ByBuildLocator(BuildLocator locator)
+    public List<Build> ByBuildLocator(IBuildLocator locator)
     {
       var buildWrapper =
         m_caller.GetFormat<BuildWrapper>(ActionHelper.CreateFieldUrl("/builds?locator={0}", m_fields), locator);
       return int.Parse(buildWrapper.Count) > 0 ? buildWrapper.Build : new List<Build>();
     }
 
-    public List<Build> ByBuildLocator(BuildLocator locator, List<String> param)
+    public List<Build> ByBuildLocator(IBuildLocator locator, List<String> param)
     {
       var strParam = GetParamLocator(param);
       var buildWrapper =
@@ -215,6 +215,55 @@ namespace TeamCitySharp.ActionTypes
         param = new List<string> { "defaultFilter:false" };
       }
       return GetBuildListQuery("/builds?locator=snapshotDependency:(to:(id:{0}),includeInitial:" + strIncludeInitial + "){1}", buildId, param);
+    }
+
+    public Build TriggerBuild(string buildConfigId)
+    {
+      return TriggerBuild(buildConfigId, null, null, null, null, null);
+    }
+
+    public Build TriggerBuild(string buildConfigId, string comment, string branchName, IEnumerable<Property> properties, int? agentId, bool? personal)
+    {
+        //<build personal="true" branchName="logicBuildBranch">
+        //    <buildType id="buildConfID"/>
+        //    <agent id="3"/>
+        //    <comment><text>build triggering comment</text></comment>
+        //    <properties>
+        //        <property name="env.myEnv" value="bbb"/>
+        //    </properties>
+        //</build>
+
+        var personalXml = personal == null ? "" : String.Format(" personal='{0}'", personal.Value.ToString().ToLower());
+        var branchXml = string.IsNullOrEmpty(branchName) ? "" : String.Format(" branchName='{0}'", branchName);
+        var buildTypeXml = string.Format("<buildType id='{0}'/>", buildConfigId);
+        var agentXml = agentId == null ? "" : string.Format("<agent id='{0}'/>", agentId);
+        var commentXml = string.IsNullOrEmpty(comment) ? "" : string.Format("<comment><text>{0}</text></comment>", comment);
+        var propertiesXml = "";
+        if (properties != null && properties.Count() > 0)
+        {
+            propertiesXml = "<properties>";
+            foreach (var property in properties)
+            {
+                propertiesXml += string.Format("<property name='{0}' value='{1}'/>", property.Name, property.Value);
+            }
+            propertiesXml += "</properties>";
+        }
+
+        var xmlData = string.Format("<build{0}{1}>{2}{3}{4}{5}</build>",
+            personalXml,
+            branchXml,
+            buildTypeXml,
+            agentXml,
+            commentXml,
+            propertiesXml);
+
+        return m_caller.Post<Build>(xmlData, HttpContentTypes.ApplicationXml, "/buildQueue", HttpContentTypes.ApplicationJson);
+    }
+
+    public Properties GetResultingProperties(string id)
+    {
+        var properties = m_caller.GetFormat<Properties>(ActionHelper.CreateFieldUrl("/builds/id:{0}/resulting-properties", m_fields), id);
+        return properties;
     }
 
     /// <summary>

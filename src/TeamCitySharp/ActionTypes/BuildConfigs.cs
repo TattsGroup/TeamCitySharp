@@ -188,77 +188,77 @@ namespace TeamCitySharp.ActionTypes
       return response;
     }
 
-    public void SetConfigurationSetting(BuildTypeLocator locator, string settingName, string settingValue)
+    public void SetConfigurationSetting(IBuildTypeLocator locator, string settingName, string settingValue)
     {
       m_caller.PutFormat(settingValue, HttpContentTypes.TextPlain, "/buildTypes/{0}/settings/{1}", locator,
                         settingName);
     }
 
-    public bool GetConfigurationPauseStatus(BuildTypeLocator locator)
+    public bool GetConfigurationPauseStatus(IBuildTypeLocator locator)
     {
       TryParse(
         m_caller.GetRaw(ActionHelper.CreateFieldUrl($"/buildTypes/{locator}/paused/", m_fields)), out var result);
       return result;
     }
 
-    public void SetConfigurationPauseStatus(BuildTypeLocator locator, bool isPaused)
+    public void SetConfigurationPauseStatus(IBuildTypeLocator locator, bool isPaused)
     {
       m_caller.PutFormat(isPaused, HttpContentTypes.TextPlain, "/buildTypes/{0}/paused/", locator);
     }
 
-    public void PostRawArtifactDependency(BuildTypeLocator locator, string rawXml)
+    public void PostRawArtifactDependency(IBuildTypeLocator locator, string rawXml)
     {
       m_caller.PostFormat<ArtifactDependency>(rawXml, HttpContentTypes.ApplicationXml, HttpContentTypes.ApplicationJson,
                                              "/buildTypes/{0}/artifact-dependencies", locator);
     }
 
-    public void PostRawBuildStep(BuildTypeLocator locator, string rawXml)
+    public void PostRawBuildStep(IBuildTypeLocator locator, string rawXml)
     {
       m_caller.PostFormat<BuildConfig>(rawXml, HttpContentTypes.ApplicationXml, HttpContentTypes.ApplicationJson,
                                       "/buildTypes/{0}/steps", locator);
     }
 
-    public void PostRawBuildTrigger(BuildTypeLocator locator, string rawXml)
+    public void PostRawBuildTrigger(IBuildTypeLocator locator, string rawXml)
     {
       m_caller.PostFormat(rawXml, HttpContentTypes.ApplicationXml, "/buildTypes/{0}/triggers", locator);
     }
 
-    public void SetArtifactDependency(BuildTypeLocator locator, ArtifactDependency dependency)
+    public void SetArtifactDependency(IBuildTypeLocator locator, ArtifactDependency dependency)
     {
       m_caller.PostFormat<ArtifactDependency>(dependency, HttpContentTypes.ApplicationJson,
                                              HttpContentTypes.ApplicationJson,
                                              "/buildTypes/{0}/artifact-dependencies", locator);
     }
 
-    public void SetSnapshotDependency(BuildTypeLocator locator, SnapshotDependency dependency)
+    public void SetSnapshotDependency(IBuildTypeLocator locator, SnapshotDependency dependency)
     {
       m_caller.PostFormat<SnapshotDependency>(dependency, HttpContentTypes.ApplicationJson,
                                              HttpContentTypes.ApplicationJson,
                                              "/buildTypes/{0}/snapshot-dependencies", locator);
     }
 
-    public void SetTrigger(BuildTypeLocator locator, BuildTrigger trigger)
+    public void SetTrigger(IBuildTypeLocator locator, BuildTrigger trigger)
     {
       m_caller.PostFormat<BuildTrigger>(trigger, HttpContentTypes.ApplicationJson, HttpContentTypes.ApplicationJson,
                                        "/buildTypes/{0}/triggers", locator);
     }
 
-    public void SetConfigurationParameter(BuildTypeLocator locator, string key, string value)
+    public void SetConfigurationParameter(IBuildTypeLocator locator, string key, string value)
     {
       m_caller.PutFormat(value, HttpContentTypes.TextPlain, "/buildTypes/{0}/parameters/{1}", locator, key);
     }
 
-    public void DeleteConfiguration(BuildTypeLocator locator)
+    public void DeleteConfiguration(IBuildTypeLocator locator)
     {
       m_caller.DeleteFormat("/buildTypes/{0}", locator);
     }
 
-    public void DeleteAllBuildTypeParameters(BuildTypeLocator locator)
+    public void DeleteAllBuildTypeParameters(IBuildTypeLocator locator)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/parameters", locator);
     }
 
-    public void PutAllBuildTypeParameters(BuildTypeLocator locator, IDictionary<string, string> parameters)
+    public void PutAllBuildTypeParameters(IBuildTypeLocator locator, IDictionary<string, string> parameters)
     {
       if (locator == null) throw new ArgumentNullException("locator");
       if (parameters == null) throw new ArgumentNullException("parameters");
@@ -280,60 +280,60 @@ namespace TeamCitySharp.ActionTypes
       m_caller.PutFormat(sw.ToString(), HttpContentTypes.ApplicationXml, "/buildTypes/{0}/parameters", locator);
     }
 
-    public void DownloadConfiguration(BuildTypeLocator locator, Action<string> downloadHandler)
+    public void DownloadConfiguration(IBuildTypeLocator locator, Action<string> downloadHandler)
     {
       var url = $"/buildTypes/{locator}";
       m_caller.GetDownloadFormat(downloadHandler, url);
     }
 
-    public void PostRawAgentRequirement(BuildTypeLocator locator, string rawXml)
+    public void PostRawAgentRequirement(IBuildTypeLocator locator, string rawXml)
     {
       m_caller.PostFormat(rawXml, HttpContentTypes.ApplicationXml, "/buildTypes/{0}/agent-requirements", locator);
     }
 
-    public void DeleteBuildStep(BuildTypeLocator locator, string buildStepId)
+    public void DeleteBuildStep(IBuildTypeLocator locator, string buildStepId)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/steps/{1}", locator, buildStepId);
     }
 
-    public void DeleteArtifactDependency(BuildTypeLocator locator, string artifactDependencyId)
+    public void DeleteArtifactDependency(IBuildTypeLocator locator, string artifactDependencyId)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/artifact-dependencies/{1}", locator, artifactDependencyId);
     }
 
-    public void DeleteAgentRequirement(BuildTypeLocator locator, string agentRequirementId)
+    public void DeleteAgentRequirement(IBuildTypeLocator locator, string agentRequirementId)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/agent-requirements/{1}", locator, agentRequirementId);
     }
 
-    public void DeleteParameter(BuildTypeLocator locator, string parameterName)
+    public void DeleteParameter(IBuildTypeLocator locator, string parameterName)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/parameters/{1}", locator, parameterName);
     }
 
-    public void DeleteBuildTrigger(BuildTypeLocator locator, string buildTriggerId)
+    public void DeleteBuildTrigger(IBuildTypeLocator locator, string buildTriggerId)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/triggers/{1}", locator, buildTriggerId);
     }
 
-    public void SetBuildTypeTemplate(BuildTypeLocator locatorBuildType, BuildTypeLocator locatorTemplate)
+    public void SetBuildTypeTemplate(IBuildTypeLocator locatorBuildType, IBuildTypeLocator locatorTemplate)
     {
       m_caller.PutFormat(locatorTemplate.ToString(), HttpContentTypes.TextPlain, "/buildTypes/{0}/template",
                         locatorBuildType);
     }
 
-    public void DeleteSnapshotDependency(BuildTypeLocator locator, string snapshotDependencyId)
+    public void DeleteSnapshotDependency(IBuildTypeLocator locator, string snapshotDependencyId)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/snapshot-dependencies/{1}", locator, snapshotDependencyId);
     }
 
-    public void PostRawSnapshotDependency(BuildTypeLocator locator, XmlElement rawXml)
+    public void PostRawSnapshotDependency(IBuildTypeLocator locator, XmlElement rawXml)
     {
       m_caller.PostFormat(rawXml.OuterXml, HttpContentTypes.ApplicationXml,
                          "/buildTypes/{0}/snapshot-dependencies", locator);
     }
 
-    public BuildConfig BuildType(BuildTypeLocator locator)
+    public BuildConfig BuildType(IBuildTypeLocator locator)
     {
       var build = m_caller.GetFormat<BuildConfig>(ActionHelper.CreateFieldUrl("/buildTypes/{0}", m_fields),
                                                  locator);
@@ -341,7 +341,7 @@ namespace TeamCitySharp.ActionTypes
       return build;
     }
 
-    public void SetBuildTypeVariable(BuildTypeLocator locatorBuildType, string nameVariable, string value)
+    public void SetBuildTypeVariable(IBuildTypeLocator locatorBuildType, string nameVariable, string value)
     {
       m_caller.PutFormat(value, HttpContentTypes.TextPlain, "/buildTypes/{0}/{1}", locatorBuildType,
                         nameVariable);
@@ -445,7 +445,7 @@ namespace TeamCitySharp.ActionTypes
       return snapshotDependencies;
     }
 
-    public Template GetTemplate(BuildTypeLocator locator)
+    public Template GetTemplate(IBuildTypeLocator locator)
     {
       try
       {
@@ -459,7 +459,7 @@ namespace TeamCitySharp.ActionTypes
       }
     }
 
-    public Templates GetTemplates(BuildTypeLocator locator)
+    public Templates GetTemplates(IBuildTypeLocator locator)
     {
       try
       {
@@ -473,22 +473,22 @@ namespace TeamCitySharp.ActionTypes
       }
     }
 
-    public void AttachTemplate(BuildTypeLocator locator, string templateId)
+    public void AttachTemplate(IBuildTypeLocator locator, string templateId)
     {
       m_caller.PutFormat(templateId, HttpContentTypes.TextPlain, "/buildTypes/{0}/template", locator);
     }
 
-    public void AttachTemplates(BuildTypeLocator locator, Templates templateList)
+    public void AttachTemplates(IBuildTypeLocator locator, Templates templateList)
     {
       m_caller.PutFormat<Templates>(templateList, HttpContentTypes.ApplicationJson, HttpContentTypes.ApplicationJson, "/buildTypes/{0}/templates", locator);
     }
 
-    public void DetachTemplate(BuildTypeLocator locator)
+    public void DetachTemplate(IBuildTypeLocator locator)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/template", locator);
     }
 
-    public void DetachTemplates(BuildTypeLocator locator)
+    public void DetachTemplates(IBuildTypeLocator locator)
     {
       m_caller.DeleteFormat("/buildTypes/{0}/templates", locator);
     }
